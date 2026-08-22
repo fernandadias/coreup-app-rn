@@ -34,14 +34,18 @@ export interface Usuario {
 
 export type ExercicioId = string
 
-/** Padrão de movimento — organiza a biblioteca e o construtor de rotina (#56). */
-export type PadraoMovimento =
-  | 'empurrar'
-  | 'puxar'
-  | 'agachar'
-  | 'dobradica'
-  | 'core'
-  | 'mobilidade'
+/** Agrupamento muscular — mesmo vocabulário do dash-pro (fonte da verdade). */
+export type Agrupamento =
+  | 'Peitoral'
+  | 'Costas'
+  | 'Ombros'
+  | 'Biceps'
+  | 'Triceps'
+  | 'Quadriceps'
+  | 'PosteriorCoxa'
+  | 'Gluteos'
+  | 'Panturrilhas'
+  | 'Core'
 
 /**
  * Taxonomia postural (#55): o que o exercício compensa das horas sentado.
@@ -54,20 +58,23 @@ export type PadraoPostural =
   | 'ativacao-glutea'
   | 'retracao-escapular'
   | 'mobilidade-cervical'
-  | 'antirrotacao-core'
+  | 'estabilidade-core'
 
+/**
+ * Espelha ExercicioBiblioteca do dash-pro. Carregado de biblioteca.json,
+ * gerado por scripts/gerar-biblioteca.mjs — não editar à mão.
+ */
 export interface Exercicio {
   id: ExercicioId
   nome: string
-  /** Grupos musculares principais. Ex: ['Peito', 'Tríceps'] */
-  musculos: string[]
-  padrao: PadraoMovimento
-  /** O que compensa do sentar (#55). Vazio = não compensa. */
+  musculoPrincipal: Agrupamento
+  musculosSecundarios: Agrupamento[]
+  padraoMovimento: string
+  tipo: 'composto' | 'isolado' | null
+  equipamentos: string[]
+  nivel: 'iniciante' | 'intermediario' | 'avancado'
+  /** O que compensa do sentar (#55). Vazio = não compensa — é informação, não lacuna. */
   compensa: PadraoPostural[]
-  /** Descanso alvo padrão, em segundos. A rotina pode sobrescrever. */
-  restSecPadrao: number
-  /** Vídeo/imagem de execução (#31). Ainda não populado. */
-  midiaUrl: string | null
 }
 
 // ---------------------------------------------------------------------------
@@ -97,8 +104,8 @@ export interface BlocoRotina {
   /** Referência à biblioteca (#54) — não mais o nome em texto. */
   exercicioId: ExercicioId
   series: SeriePrescrita[]
-  /** Sobrescreve o restSecPadrao do exercício, quando o coach quiser. */
-  restSec: number | null
+  /** Descanso alvo, em segundos. Vem da prescrição, não da biblioteca. */
+  restSec: number
 }
 
 export interface Rotina {

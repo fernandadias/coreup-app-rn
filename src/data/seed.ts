@@ -23,8 +23,8 @@ export const rotinaA: Rotina = {
     'Controla a descida (2–3s). Se o PSE passar de 8 nas primeiras séries, reduz 2,5kg. Cuida do ombro no supino.',
   blocos: [
     {
-      exercicioId: 'supino-reto',
-      restSec: null,
+      exercicioId: 'ex-001',
+      restSec: 120,
       series: [
         { tipo: 'aquecimento', kgAlvo: '20', repsAlvo: '15', pseAlvo: null },
         { tipo: 'valida', kgAlvo: '62.5', repsAlvo: '10', pseAlvo: 7 },
@@ -33,8 +33,8 @@ export const rotinaA: Rotina = {
       ],
     },
     {
-      exercicioId: 'supino-inclinado',
-      restSec: null,
+      exercicioId: 'ex-002',
+      restSec: 90,
       series: [
         { tipo: 'valida', kgAlvo: '22', repsAlvo: '12', pseAlvo: 8 },
         { tipo: 'valida', kgAlvo: '', repsAlvo: '11', pseAlvo: 8 },
@@ -42,8 +42,8 @@ export const rotinaA: Rotina = {
       ],
     },
     {
-      exercicioId: 'crucifixo',
-      restSec: null,
+      exercicioId: 'ex-003',
+      restSec: 60,
       series: [
         { tipo: 'valida', kgAlvo: '30', repsAlvo: '15', pseAlvo: 8 },
         { tipo: 'valida', kgAlvo: '', repsAlvo: '13', pseAlvo: 9 },
@@ -51,8 +51,8 @@ export const rotinaA: Rotina = {
       ],
     },
     {
-      exercicioId: 'triceps-polia',
-      restSec: null,
+      exercicioId: 'ex-025',
+      restSec: 60,
       series: [
         { tipo: 'valida', kgAlvo: '25', repsAlvo: '12', pseAlvo: 8 },
         { tipo: 'valida', kgAlvo: '', repsAlvo: '12', pseAlvo: 8 },
@@ -61,8 +61,8 @@ export const rotinaA: Rotina = {
       ],
     },
     {
-      exercicioId: 'triceps-testa',
-      restSec: null,
+      exercicioId: 'ex-024',
+      restSec: 90,
       series: [
         { tipo: 'valida', kgAlvo: '20', repsAlvo: '12', pseAlvo: 8 },
         { tipo: 'valida', kgAlvo: '', repsAlvo: '11', pseAlvo: 8 },

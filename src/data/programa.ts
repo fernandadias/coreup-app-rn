@@ -12,7 +12,7 @@ import type {
   SerieData,
   TreinoData,
 } from './types'
-import { getExercicio } from './exercicios'
+import { getExercicio, ROTULO_AGRUPAMENTO } from './exercicios'
 
 /** "1", "2", "3"... nas válidas; "A" nas de aquecimento. */
 function rotular(bloco: BlocoRotina): SerieData[] {
@@ -28,8 +28,8 @@ function rotular(bloco: BlocoRotina): SerieData[] {
  * "Peito · 4 séries" — derivado dos músculos do exercício e da contagem.
  * Conta TODAS as linhas, aquecimento incluído, como fazia o seed escrito à mão.
  */
-function rotuloGrupo(musculos: string[], nSeries: number): string {
-  const grupo = musculos[0] ?? 'Geral'
+function rotuloGrupo(agrupamento: string, nSeries: number): string {
+  const grupo = ROTULO_AGRUPAMENTO[agrupamento] ?? agrupamento
   return `${grupo} · ${nSeries} ${nSeries === 1 ? 'série' : 'séries'}`
 }
 
@@ -53,8 +53,8 @@ function hidratarBloco(bloco: BlocoRotina): ExercicioData | null {
   return {
     id: ex.id,
     nome: ex.nome,
-    grupo: rotuloGrupo(ex.musculos, series.length),
-    restSec: bloco.restSec ?? ex.restSecPadrao,
+    grupo: rotuloGrupo(ex.musculoPrincipal, series.length),
+    restSec: bloco.restSec,
     pseAlvoLabel: rotuloPseAlvo(series),
     compensa: ex.compensa,
     series,
