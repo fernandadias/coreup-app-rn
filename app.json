@@ -1,0 +1,47 @@
+{
+  "expo": {
+    "name": "CoreUP",
+    "slug": "coreup-app-rn",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "scheme": "coreup",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#0A0E0C",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.nandadias.coreup",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "package": "com.nandadias.coreup",
+      "adaptiveIcon": {
+        "backgroundColor": "#0A0E0C",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-font"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "61e0014d-c972-4095-a6b1-09b69f989288"
+      }
+    },
+    "owner": "fernanda.gracas",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/61e0014d-c972-4095-a6b1-09b69f989288"
+    }
+  }
+}
