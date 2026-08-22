@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   Animated,
   Pressable,
@@ -24,6 +24,7 @@ import { getTreino } from '../data/seed'
 import type { ScreenProps } from '../navigation/types'
 import type { SerieLog, Sessao, SetTipo } from '../data/types'
 import { useDuration } from '../lib/useDuration'
+import { startWorkoutActivity, updateWorkoutActivity, endWorkoutActivity } from '../liveactivity'
 
 const HEADER_H = 52
 
@@ -199,6 +200,28 @@ export function TreinoScreen({ route, navigation }: ScreenProps<'Treino'>) {
     return { feitas, total, volume }
   }, [exs])
 
+  const exercicioAtual = useMemo(() => {
+    for (const ex of exs) if (ex.series.some((s) => !s.done)) return ex.nome
+    return exs[exs.length - 1]?.nome ?? treino?.titulo ?? 'Treino'
+  }, [exs])
+
+  // Live Activity (iOS): inicia no começo, atualiza por evento (série/status), encerra ao sair
+  useEffect(() => {
+    const total0 = exs.reduce((a, e) => a + e.series.length, 0)
+    startWorkoutActivity({ exercicio: exs[0]?.nome ?? 'Treino', serie: 0, totalSeries: total0, status: 'Em treino' })
+    return () => endWorkoutActivity({ exercicio: '', serie: 0, totalSeries: 0, status: 'Concluído' })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    updateWorkoutActivity({
+      exercicio: exercicioAtual,
+      serie: feitas,
+      totalSeries: total,
+      status: rest.open ? 'Descanso' : 'Em treino',
+    })
+  }, [feitas, total, rest.open, exercicioAtual])
+
   const concluir = () => {
     const logs: SerieLog[] = []
     exs.forEach((ex) => {
@@ -218,6 +241,7 @@ export function TreinoScreen({ route, navigation }: ScreenProps<'Treino'>) {
       sensacao: null,
       logs,
     }
+    endWorkoutActivity({ exercicio: exercicioAtual, serie: feitas, totalSeries: total, status: 'Concluído' })
     navigation.navigate('Fim', { sessao })
   }
 

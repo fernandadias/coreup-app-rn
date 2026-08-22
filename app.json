@@ -12,7 +12,8 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.nandadias.coreup",
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+        "NSSupportsLiveActivities": true
       }
     },
     "android": {
@@ -29,7 +30,14 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-font"
+      "expo-font",
+      [
+        "expo-widgets",
+        {
+          "bundleIdentifier": "com.nandadias.coreup.widgets",
+          "groupIdentifier": "group.com.nandadias.coreup"
+        }
+      ]
     ],
     "extra": {
       "eas": {
