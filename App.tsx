@@ -8,6 +8,8 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 import { fontMap } from './src/theme/fonts'
 import { colors } from './src/theme/theme'
+import { AuthProvider, useAuth } from './src/auth/AuthProvider'
+import { LoginScreen } from './src/screens/LoginScreen'
 import { HomeScreen } from './src/screens/HomeScreen'
 import { TreinoScreen } from './src/screens/TreinoScreen'
 import { FimScreen } from './src/screens/FimScreen'
@@ -27,38 +29,54 @@ const navTheme = {
   },
 }
 
+function Splash() {
+  return (
+    <View style={{ flex: 1, backgroundColor: colors.bg0, alignItems: 'center', justifyContent: 'center' }}>
+      <ActivityIndicator color={colors.accent} />
+    </View>
+  )
+}
+
+// Portão: sem sessão → Login; com sessão → app.
+function Root() {
+  const { session, loading } = useAuth()
+
+  if (loading) return <Splash />
+  if (!session) return <LoginScreen />
+
+  return (
+    <NavigationContainer theme={navTheme}>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+          contentStyle: { backgroundColor: colors.bg0 },
+          animation: 'slide_from_right',
+        }}
+      >
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Treino" component={TreinoScreen} />
+        <Stack.Screen
+          name="Fim"
+          component={FimScreen}
+          options={{ animation: 'slide_from_bottom', gestureEnabled: false }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  )
+}
+
 export default function App() {
   const [loaded] = useFonts(fontMap)
 
-  if (!loaded) {
-    return (
-      <View style={{ flex: 1, backgroundColor: colors.bg0, alignItems: 'center', justifyContent: 'center' }}>
-        <ActivityIndicator color={colors.accent} />
-      </View>
-    )
-  }
+  if (!loaded) return <Splash />
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
-      <StatusBar style="light" />
-      <NavigationContainer theme={navTheme}>
-        <Stack.Navigator
-          screenOptions={{
-            headerShown: false,
-            contentStyle: { backgroundColor: colors.bg0 },
-            animation: 'slide_from_right',
-          }}
-        >
-          <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="Treino" component={TreinoScreen} />
-          <Stack.Screen
-            name="Fim"
-            component={FimScreen}
-            options={{ animation: 'slide_from_bottom', gestureEnabled: false }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+        <StatusBar style="light" />
+        <AuthProvider>
+          <Root />
+        </AuthProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   )
