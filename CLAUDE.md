@@ -12,18 +12,27 @@ App nativo do aluno da **CoreUP** (consultoria de musculação da Nanda). Onde o
 
 A Nanda é designer que usa código como ferramenta. Responder em **português (pt-BR)**. Tom direto, sem enrolação.
 
-## Estado atual (onde paramos — 22/08/2026)
+## Estado atual (onde paramos — 23/08/2026)
 
-- **`main` tem tudo**: v1 local-first + craft pass (visual Hevy-grade) + Live Activity (iOS). Está no GitHub.
+- **`main` tem tudo**: v1 local-first + craft pass (visual Hevy-grade) + Live Activity (iOS) + **fundação dos dois mundos** (anamnese, perfil, rotinas). Está no GitHub.
 - **TestFlight**: o build lá ainda é a **v1 (build 2), ANTES do craft/Live Activity**. A Nanda está validando essa v1.
-- **Próximo passo**: rodar um **build novo da `main`** (leva craft + Live Activity pro TestFlight) e validar no device.
+- **Próximo passo**: rodar um **build novo da `main`** e validar no device.
 - **Tag `craft-clean`**: fallback só-craft (sem Live Activity), caso o módulo alpha da Live Activity quebre o build nativo.
 
+### Modelo de dois mundos (#69) — a coluna vertebral
+O app tem **livre** (self-serve, funil) e **aluna** (consultoria paga), via `plano` no `Usuario`. Grátis = ferramenta inteligente; pago = coach. A v1/MVP foca **só na aluna** (as 3 testadoras da consultoria); o mundo livre está **arquitetado no modelo/navegação mas não implementado** até o CoreUP voltar ao radar (pós-formatura CBMF, out/2026). Ver memória `coreup-app-dois-mundos`.
+
 ### O que já está implementado
-- **Home**: treino de hoje, recado do coach, lista do programa, iniciar treino.
-- **Treino (coração)**: séries com input soft, add série (botão) e remover série (swipe-to-delete), PSE em bottom-sheet, rest timer, header de vidro colapsável (duração migra pro topo no scroll), nudge de carga, header com duração/volume/séries.
-- **Fim**: resumo + "como se sentiu" (1–5), salva a sessão **local** (AsyncStorage).
-- **Live Activity (iOS)**: Dynamic Island + lock screen mostrando exercício + série X/Y + status. Atualiza por **evento** (não tem timer ao vivo — ver limitações).
+- **Anamnese (first-run, gate)**: 5 passos (objetivo, onde treina, estilo, rotina+atividades, dores+obs). Passo 1 tem só Continuar (100% largura, sem Voltar). Sem ela preenchida, o app inteiro é a anamnese; ao salvar, o `RootStack` troca pras tabs sozinho. Storage em `src/storage/perfil.ts`; estado reativo no `PerfilProvider`. TODO: quando o sync existir, abrir pré-preenchida do Admin → vira "confirme seus dados".
+- **Home (hub)**: logo real (assets/logo-coreupteam.png) + avatar (→ Perfil) + sequência (semanas reais), treino de hoje, **resumo da semana** (feitos/meta), recado do coach, programa A/B/C (toca e inicia). Rotinas foi absorvida aqui.
+- **Treino (coração)**: séries com input soft, add/remover série (swipe), PSE bottom-sheet, rest timer, header de vidro colapsável, nudge de carga.
+- **Fim**: resumo + "como se sentiu" (1–5), salva local (AsyncStorage).
+- **Evolução**: resumo (treinos/volume/mês) + **3 recordes** (1RM estimado por exercício via Epley com badge NOVO, treino mais pesado, sequência de semanas) + histórico. Lógica em `src/lib/stats.ts` (compartilhada com a Home).
+- **Perfil (stack, via avatar)**: badge "Aluna CoreUP", resumo da anamnese (com Refazer), conta (sair, excluir — exclusão real é TODO backend #48).
+- **Live Activity (iOS)**: Dynamic Island + lock screen. Atualiza por evento (ver limitações).
+
+### Navegação
+Tab bar = **2** (Início · Evolução). **Perfil não é tab** — é avatar no header. Anamnese é gate fora das tabs. Rotinas foi removida (a Home é o hub); volta como aba só no mundo livre.
 
 ## Stack
 
@@ -37,12 +46,14 @@ A Nanda é designer que usa código como ferramenta. Responder em **português (
 ```
 src/
   theme/       theme.ts (cores/radius/fonts), fonts.ts (useFonts map)
-  data/        types.ts, seed.ts  ← programa placeholder; trocar pelo real aqui
-  storage/     sessions.ts (AsyncStorage; vira fila de sync na v1.1)
-  lib/         format.ts, useDuration.ts
+  data/        types.ts (+ Anamnese, Plano), seed.ts  ← programa placeholder; trocar pelo real aqui
+  storage/     sessions.ts, perfil.ts (anamnese local)
+  auth/        AuthProvider (Supabase)
+  perfil/      PerfilProvider (anamnese reativa + nome + plano)
+  lib/         format.ts, useDuration.ts, stats.ts (1RM/sequência/volume — Home + Evolução)
   components/  Button, Card, Badge, Screen, Icon, PseSheet, RestTimer
-  screens/     HomeScreen, TreinoScreen (core), FimScreen
-  navigation/  types.ts (RootStack: Home → Treino → Fim)
+  screens/     AnamneseScreen (gate), HomeScreen (hub), TreinoScreen (core), FimScreen, EvolucaoScreen, PerfilScreen
+  navigation/  types.ts (RootStack: Anamnese | Tabs → Treino/Fim/Perfil; Tabs: Home/Evolucao)
   liveactivity/ WorkoutActivity.tsx ('widget' → SwiftUI), index.ts (start/update/end)
 App.tsx        fontes + NavigationContainer + GestureHandlerRootView
 ```

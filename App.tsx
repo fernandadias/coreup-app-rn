@@ -11,11 +11,14 @@ import { fontMap } from './src/theme/fonts'
 import { colors, font } from './src/theme/theme'
 import { Icon } from './src/components/Icon'
 import { AuthProvider, useAuth } from './src/auth/AuthProvider'
+import { PerfilProvider, usePerfil } from './src/perfil/PerfilProvider'
 import { LoginScreen } from './src/screens/LoginScreen'
+import { AnamneseScreen } from './src/screens/AnamneseScreen'
 import { HomeScreen } from './src/screens/HomeScreen'
 import { EvolucaoScreen } from './src/screens/EvolucaoScreen'
 import { TreinoScreen } from './src/screens/TreinoScreen'
 import { FimScreen } from './src/screens/FimScreen'
+import { PerfilScreen } from './src/screens/PerfilScreen'
 import type { RootStackParamList, TabsParamList } from './src/navigation/types'
 
 const RootStack = createNativeStackNavigator<RootStackParamList>()
@@ -67,25 +70,36 @@ function Tabs() {
   )
 }
 
-// Portão: sem sessão → Login; com sessão → app.
+// Portão: sem sessão → Login; sem anamnese → Anamnese (first-run); com tudo → app.
 function Root() {
-  const { session, loading } = useAuth()
+  const { session, loading: authLoading } = useAuth()
+  const { anamnese, loading: perfilLoading } = usePerfil()
 
-  if (loading) return <Splash />
+  if (authLoading) return <Splash />
   if (!session) return <LoginScreen />
+  if (perfilLoading) return <Splash />
 
   return (
     <NavigationContainer theme={navTheme}>
       <RootStack.Navigator
         screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.bg0 } }}
       >
-        <RootStack.Screen name="Tabs" component={Tabs} />
-        <RootStack.Screen name="Treino" component={TreinoScreen} options={{ animation: 'slide_from_right' }} />
-        <RootStack.Screen
-          name="Fim"
-          component={FimScreen}
-          options={{ animation: 'slide_from_bottom', gestureEnabled: false }}
-        />
+        {!anamnese ? (
+          // gate de first-run: a anamnese ocupa o app inteiro até estar preenchida.
+          // Ao salvar, o PerfilProvider atualiza e o navigator troca pras tabs sozinho.
+          <RootStack.Screen name="Anamnese" component={AnamneseScreen} />
+        ) : (
+          <>
+            <RootStack.Screen name="Tabs" component={Tabs} />
+            <RootStack.Screen name="Treino" component={TreinoScreen} options={{ animation: 'slide_from_right' }} />
+            <RootStack.Screen
+              name="Fim"
+              component={FimScreen}
+              options={{ animation: 'slide_from_bottom', gestureEnabled: false }}
+            />
+            <RootStack.Screen name="Perfil" component={PerfilScreen} options={{ animation: 'slide_from_right' }} />
+          </>
+        )}
       </RootStack.Navigator>
     </NavigationContainer>
   )
@@ -101,7 +115,9 @@ export default function App() {
       <SafeAreaProvider>
         <StatusBar style="light" />
         <AuthProvider>
-          <Root />
+          <PerfilProvider>
+            <Root />
+          </PerfilProvider>
         </AuthProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>

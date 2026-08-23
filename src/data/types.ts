@@ -17,15 +17,75 @@
 export type UsuarioId = string
 export type CoachId = string
 
+/**
+ * Plano do usuário — a coluna vertebral dos dois mundos do app.
+ *   'livre' → app self-serve: anamnese + treino de IA/próprio + log. Funil de aquisição.
+ *   'aluna' → fez upgrade pra consultoria: programa do coach, recados, acompanhamento.
+ * Deriva de coachId (aluna ⇔ coachId != null), mas é explícito porque estado de
+ * assinatura e vínculo com coach podem divergir (ex.: trial, pausa). A v1 só cria 'aluna'.
+ */
+export type Plano = 'livre' | 'aluna'
+
 export interface Usuario {
   id: UsuarioId
   nome: string
   email: string | null
   criadoEm: number // epoch ms
-  /** Vínculo com a consultoria (#6). null = usuário do app geral. */
+  /** Em qual mundo do app a pessoa está (#69). Define o que ela vê e o que pode editar. */
+  plano: Plano
+  /** Vínculo com a consultoria (#6). null = usuário do app geral. Preenchido ⇒ plano 'aluna'. */
   coachId: CoachId | null
-  /** Horas sentado por dia, do questionário de entrada (#66). Alimenta a contraconta. */
+  /** Horas sentado por dia, do questionário de entrada (#66). Alimenta a contraconta. Espelha anamnese.horasSentadoDia. */
   horasSentadoDia: number | null
+}
+
+// ---------------------------------------------------------------------------
+// Anamnese (#66, #69) — o questionário de entrada, first-run obrigatório
+// ---------------------------------------------------------------------------
+// Serve os dois mundos: no livre alimenta a sugestão de treino por IA; na aluna
+// é o brief que o coach lê no dash. É a base do diferencial — a inteligência do
+// app sobre QUEM é a pessoa, não só o log do que ela fez.
+
+export type Objetivo =
+  | 'hipertrofia' // ganhar músculo
+  | 'emagrecimento' // perder gordura
+  | 'forca' // ficar mais forte
+  | 'saude' // saúde e postura / contraconta do sentar
+  | 'condicionamento' // fôlego e disposição
+
+/** Onde a pessoa pode treinar — multi. Guia a seleção de exercícios e a substituição. */
+export type LocalTreino =
+  | 'academia-completa' // academia cheia, todos os aparelhos
+  | 'academia-predio' // academia de condomínio, equipamento limitado
+  | 'casa' // peso do corpo / halteres / elásticos
+
+/** Preferência de estímulo — o que a pessoa curte fazer, pra o treino não virar tortura. */
+export type EstiloTreino =
+  | 'maquinas' // guiado, seguro
+  | 'peso-livre' // barra e halteres
+  | 'funcional' // circuito, corpo livre
+  | 'misto'
+
+/** Outras atividades além da musculação — pra dimensionar volume e recuperação. */
+export type OutraAtividade = 'corrida' | 'luta' | 'crossfit' | 'yoga-pilates' | 'ciclismo' | 'danca' | 'nenhuma'
+
+/** Regiões de dor/limitação relatadas — o coach e a IA evitam agravar. */
+export type RegiaoDor = 'lombar' | 'joelho' | 'ombro' | 'punho' | 'cervical' | 'quadril' | 'tornozelo'
+
+export interface Anamnese {
+  usuarioId: UsuarioId
+  /** Horas sentado por dia (trabalho). Base da contraconta postural (#58). */
+  horasSentadoDia: number
+  objetivo: Objetivo
+  locais: LocalTreino[]
+  estilos: EstiloTreino[]
+  outrasAtividades: OutraAtividade[]
+  dores: RegiaoDor[]
+  /** Espaço aberto — a dor que não coube nas opções, contexto pro coach. */
+  observacoes: string
+  /** Quantos dias por semana pretende treinar. */
+  diasPorSemana: number
+  preenchidaEm: number // epoch ms
 }
 
 // ---------------------------------------------------------------------------

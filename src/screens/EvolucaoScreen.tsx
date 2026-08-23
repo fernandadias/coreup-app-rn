@@ -5,7 +5,8 @@ import { Screen } from '../components/Screen'
 import { Card } from '../components/Card'
 import { Icon } from '../components/Icon'
 import { colors, font, radius } from '../theme/theme'
-import { fmtClock, parseKg } from '../lib/format'
+import { fmtClock } from '../lib/format'
+import { recordes1RM, treinoMaisPesado, weeksStreak } from '../lib/stats'
 import { listSessions } from '../storage/sessions'
 import { getExercicio } from '../data/exercicios'
 import type { Sessao } from '../data/types'
@@ -16,6 +17,7 @@ const fmtData = (ts: number) => {
   return `${d.getDate()} ${MESES[d.getMonth()]}`
 }
 const fmtVol = (n: number) => Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+const fmtKg = (n: number) => n.toString().replace('.', ',')
 
 const FACE: Record<number, React.ComponentProps<typeof Icon>['name']> = {
   1: 'face-tired',
@@ -23,46 +25,6 @@ const FACE: Record<number, React.ComponentProps<typeof Icon>['name']> = {
   3: 'face-meh',
   4: 'face-smile',
   5: 'face-grin-stars',
-}
-
-interface Recorde {
-  id: string
-  nome: string
-  bestKg: number
-  bestReps: number
-  serie: number[] // maxKg por sessão, cronológico
-}
-
-function agregar(sessions: Sessao[]): Recorde[] {
-  // sessions vem do storage (mais recente primeiro); pra progressão queremos crescente
-  const cron = [...sessions].reverse()
-  const porEx = new Map<string, Recorde & { _porSessao: Map<string, number> }>()
-
-  cron.forEach((s) => {
-    s.logs.forEach((l) => {
-      if (l.tipo === 'aquecimento') return
-      const kg = parseKg(l.kg)
-      if (!Number.isFinite(kg)) return
-      const reps = parseInt(l.reps, 10)
-      const nome = getExercicio(l.exercicioId)?.nome ?? 'Exercício'
-      const cur =
-        porEx.get(l.exercicioId) ??
-        ({ id: l.exercicioId, nome, bestKg: 0, bestReps: 0, serie: [], _porSessao: new Map() } as Recorde & {
-          _porSessao: Map<string, number>
-        })
-      if (kg > cur.bestKg) {
-        cur.bestKg = kg
-        cur.bestReps = Number.isFinite(reps) ? reps : 0
-      }
-      const atual = cur._porSessao.get(s.id) ?? 0
-      cur._porSessao.set(s.id, Math.max(atual, kg))
-      porEx.set(l.exercicioId, cur)
-    })
-  })
-
-  return [...porEx.values()]
-    .map((r) => ({ id: r.id, nome: r.nome, bestKg: r.bestKg, bestReps: r.bestReps, serie: [...r._porSessao.values()] }))
-    .sort((a, b) => b.serie.length - a.serie.length)
 }
 
 export function EvolucaoScreen() {
@@ -85,7 +47,10 @@ export function EvolucaoScreen() {
     const d = new Date(s.iniciadaEm)
     return d.getMonth() === agora.getMonth() && d.getFullYear() === agora.getFullYear()
   }).length
-  const recordes = agregar(sessions)
+
+  const recordes = recordes1RM(sessions)
+  const maisPesado = treinoMaisPesado(sessions)
+  const streak = weeksStreak(sessions)
 
   return (
     <Screen>
@@ -107,21 +72,52 @@ export function EvolucaoScreen() {
               <Metric value={String(esteMes)} label="Este mês" />
             </Card>
 
-            <Text style={styles.section}>Recordes</Text>
-            {recordes.map((r) => (
-              <View key={r.id} style={styles.recRow}>
-                <View style={{ flex: 1 }}>
-                  <Text style={styles.recNome} numberOfLines={1}>
-                    {r.nome}
-                  </Text>
-                  <Text style={styles.recBest}>
-                    Recorde <Text style={styles.recBestVal}>{r.bestKg.toString().replace('.', ',')} kg</Text>
-                    {r.bestReps ? ` × ${r.bestReps}` : ''}
-                  </Text>
-                </View>
-                <Sparkline valores={r.serie} />
-              </View>
-            ))}
+            {/* dois cartões-herói */}
+            <View style={styles.heroRow}>
+              <HeroCard
+                icon="trophy"
+                titulo="Treino mais pesado"
+                valor={maisPesado ? fmtVol(maisPesado.volumeTotal ?? 0) : '—'}
+                unidade="kg"
+                rodape={maisPesado ? fmtData(maisPesado.iniciadaEm) : ''}
+              />
+              <HeroCard
+                icon="fire"
+                titulo="Sequência"
+                valor={String(streak)}
+                unidade={streak === 1 ? 'semana' : 'semanas'}
+                rodape="sem furar"
+              />
+            </View>
+
+            {recordes.length > 0 && (
+              <>
+                <Text style={styles.section}>1RM estimado</Text>
+                {recordes.map((r) => (
+                  <View key={r.exercicioId} style={styles.recRow}>
+                    <View style={{ flex: 1 }}>
+                      <View style={styles.recTop}>
+                        <Text style={styles.recNome} numberOfLines={1}>
+                          {getExercicio(r.exercicioId)?.nome ?? 'Exercício'}
+                        </Text>
+                        {r.novo && (
+                          <View style={styles.novoBadge}>
+                            <Text style={styles.novoTxt}>NOVO</Text>
+                          </View>
+                        )}
+                      </View>
+                      <Text style={styles.recBase}>
+                        de {fmtKg(r.kg)} kg × {r.reps}
+                      </Text>
+                    </View>
+                    <Text style={styles.recValor}>
+                      {fmtKg(r.est1RM)} <Text style={styles.recUnid}>kg</Text>
+                    </Text>
+                  </View>
+                ))}
+                <Text style={styles.nota}>Estimativa a partir das suas séries (fórmula de Epley).</Text>
+              </>
+            )}
 
             <Text style={styles.section}>Histórico</Text>
             {sessions.map((s) => (
@@ -155,21 +151,29 @@ function Metric({ value, label, accent }: { value: string; label: string; accent
   )
 }
 
-function Sparkline({ valores }: { valores: number[] }) {
-  const dados = valores.slice(-10)
-  const max = Math.max(...dados, 1)
+function HeroCard({
+  icon,
+  titulo,
+  valor,
+  unidade,
+  rodape,
+}: {
+  icon: React.ComponentProps<typeof Icon>['name']
+  titulo: string
+  valor: string
+  unidade: string
+  rodape: string
+}) {
   return (
-    <View style={styles.spark}>
-      {dados.map((v, i) => (
-        <View
-          key={i}
-          style={[
-            styles.bar,
-            { height: Math.max(3, (v / max) * 28) },
-            i === dados.length - 1 && { backgroundColor: colors.accent },
-          ]}
-        />
-      ))}
+    <View style={styles.hero}>
+      <View style={styles.heroHead}>
+        <Icon name={icon} size={13} color={colors.accent} />
+        <Text style={styles.heroTitulo}>{titulo}</Text>
+      </View>
+      <Text style={styles.heroValor}>
+        {valor} <Text style={styles.heroUnid}>{unidade}</Text>
+      </Text>
+      <Text style={styles.heroRodape}>{rodape}</Text>
     </View>
   )
 }
@@ -180,7 +184,7 @@ const styles = StyleSheet.create({
   empty: { alignItems: 'center', gap: 12, paddingVertical: 60, paddingHorizontal: 24 },
   emptyTxt: { color: colors.muted, fontFamily: font.medium, fontSize: 14, textAlign: 'center', lineHeight: 20 },
 
-  resumo: { flexDirection: 'row', alignItems: 'center', paddingVertical: 16, marginBottom: 8 },
+  resumo: { flexDirection: 'row', alignItems: 'center', paddingVertical: 16, marginBottom: 12 },
   metric: { flex: 1, alignItems: 'center' },
   metricValue: { color: colors.text, fontFamily: font.displayX, fontSize: 24 },
   metricLabel: {
@@ -193,13 +197,34 @@ const styles = StyleSheet.create({
   },
   sep: { width: 1, alignSelf: 'stretch', backgroundColor: colors.border, marginVertical: 4 },
 
+  heroRow: { flexDirection: 'row', gap: 10 },
+  hero: {
+    flex: 1,
+    backgroundColor: colors.bg1,
+    borderColor: colors.border,
+    borderWidth: 1,
+    borderRadius: radius.lg,
+    padding: 14,
+  },
+  heroHead: { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 10 },
+  heroTitulo: {
+    color: colors.muted,
+    fontFamily: font.semibold,
+    fontSize: 10.5,
+    letterSpacing: 0.3,
+    textTransform: 'uppercase',
+  },
+  heroValor: { color: colors.text, fontFamily: font.displayX, fontSize: 30 },
+  heroUnid: { color: colors.muted, fontFamily: font.semibold, fontSize: 14 },
+  heroRodape: { color: colors.faint, fontFamily: font.regular, fontSize: 12, marginTop: 2 },
+
   section: {
     color: colors.muted,
     fontFamily: font.semibold,
     fontSize: 11,
     letterSpacing: 0.5,
     textTransform: 'uppercase',
-    marginTop: 20,
+    marginTop: 22,
     marginBottom: 10,
   },
 
@@ -214,12 +239,14 @@ const styles = StyleSheet.create({
     padding: 14,
     marginBottom: 8,
   },
-  recNome: { color: colors.text, fontFamily: font.bold, fontSize: 15 },
-  recBest: { color: colors.muted, fontFamily: font.regular, fontSize: 12.5, marginTop: 2 },
-  recBestVal: { color: colors.accent, fontFamily: font.bold },
-
-  spark: { flexDirection: 'row', alignItems: 'flex-end', gap: 2, height: 28 },
-  bar: { width: 5, borderRadius: 2, backgroundColor: colors.surface3 },
+  recTop: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  recNome: { color: colors.text, fontFamily: font.bold, fontSize: 15, flexShrink: 1 },
+  novoBadge: { backgroundColor: colors.accent, borderRadius: radius.sm, paddingHorizontal: 6, paddingVertical: 1 },
+  novoTxt: { color: colors.bg0, fontFamily: font.extrabold, fontSize: 9, letterSpacing: 0.4 },
+  recBase: { color: colors.muted, fontFamily: font.regular, fontSize: 12.5, marginTop: 2 },
+  recValor: { color: colors.accent, fontFamily: font.displayX, fontSize: 24 },
+  recUnid: { color: colors.muted, fontFamily: font.semibold, fontSize: 13 },
+  nota: { color: colors.faint, fontFamily: font.regular, fontSize: 11.5, marginTop: 2, marginBottom: 2 },
 
   histRow: {
     flexDirection: 'row',
