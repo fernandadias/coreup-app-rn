@@ -97,16 +97,18 @@ export async function fetchProgramaRemoto(): Promise<ProgramaRemoto | null> {
   if (error) return null // rede/RLS: não decide nada, provider fica com o cache
   if (!aluno) return { vinculado: false, programa: [], rotinas: {}, coachNote: '' }
 
-  const { data: plano } = await supabase
+  const { data: planos } = await supabase
     .from('planos')
     .select('dados')
     .eq('aluno_id', aluno.id)
     .order('criado_em', { ascending: false })
-    .limit(1)
-    .maybeSingle()
 
-  if (!plano?.dados) return { vinculado: true, programa: [], rotinas: {}, coachNote: '' }
-  return { vinculado: true, ...mapPlano(plano.dados as Record<string, unknown>, uid) }
+  // escolhe o plano marcado como atual no dash; se nenhum, o mais recente
+  const lista = (planos ?? []).map((r) => r.dados as Record<string, unknown>).filter(Boolean)
+  const escolhido = lista.find((d) => d?.ativo === true) ?? lista[0]
+
+  if (!escolhido) return { vinculado: true, programa: [], rotinas: {}, coachNote: '' }
+  return { vinculado: true, ...mapPlano(escolhido, uid) }
 }
 
 /** Liga a conta logada à aluna cujo app_token bate. Uma vez só. */

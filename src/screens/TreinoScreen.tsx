@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import {
+  Alert,
   Animated,
   Pressable,
   StyleSheet,
@@ -21,6 +22,7 @@ import { RestTimer, REST_TIMER_HEIGHT } from '../components/RestTimer'
 import { colors, font, radius } from '../theme/theme'
 import { fmtClock, fmtNum, fmtRest, parseKg, uid } from '../lib/format'
 import { usePrograma } from '../programa/ProgramaProvider'
+import { loadActiveWorkout, saveActiveWorkout, clearActiveWorkout } from '../storage/activeWorkout'
 import type { ScreenProps } from '../navigation/types'
 import type { SerieLog, Sessao, SetTipo } from '../data/types'
 import { useDuration } from '../lib/useDuration'
@@ -102,8 +104,33 @@ export function TreinoScreen({ route, navigation }: ScreenProps<'Treino'>) {
     }))
   )
 
-  const startedAt = useRef(Date.now()).current
+  const [startedAt, setStartedAt] = useState(() => Date.now())
+  const [pronto, setPronto] = useState(false)
   const elapsed = useDuration(startedAt)
+  const rotinaId = treino?.id ?? route.params.treinoId
+
+  // ao abrir: se há treino em andamento DESTA rotina, continua de onde parou
+  useEffect(() => {
+    let alive = true
+    loadActiveWorkout().then((aw) => {
+      if (!alive) return
+      if (aw && aw.rotinaId === rotinaId && Array.isArray(aw.exs) && (aw.exs as unknown[]).length > 0) {
+        setExs(aw.exs as ExercicioRT[])
+        setStartedAt(aw.iniciadaEm)
+      }
+      setPronto(true)
+    })
+    return () => {
+      alive = false
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // persiste o progresso a cada mudança (offline-first) — vira a barra "em andamento" da Home
+  useEffect(() => {
+    if (!pronto) return
+    void saveActiveWorkout({ rotinaId, rotinaTitulo: treino?.titulo ?? 'Treino', iniciadaEm: startedAt, exs })
+  }, [exs, pronto, startedAt, rotinaId, treino])
 
   const scrollY = useRef(new Animated.Value(0)).current
   const titleOpacity = scrollY.interpolate({ inputRange: [0, 40, 72], outputRange: [1, 1, 0], extrapolate: 'clamp' })
@@ -259,8 +286,24 @@ export function TreinoScreen({ route, navigation }: ScreenProps<'Treino'>) {
       logs,
     }
     endWorkoutActivity({ exercicio: exercicioAtual, serie: feitas, totalSeries: total, status: 'Concluído' })
+    void clearActiveWorkout() // sessão concluída sai de "em andamento"
     navigation.navigate('Fim', { sessao })
   }
+
+  // parar = descartar o treino em andamento sem registrar (ex.: entrou sem querer)
+  const parar = () =>
+    Alert.alert('Parar treino', 'O que você registrou será descartado.', [
+      { text: 'Continuar treinando', style: 'cancel' },
+      {
+        text: 'Parar',
+        style: 'destructive',
+        onPress: () => {
+          void clearActiveWorkout()
+          endWorkoutActivity({ exercicio: '', serie: 0, totalSeries: 0, status: 'Concluído' })
+          navigation.goBack()
+        },
+      },
+    ])
 
   if (!treino) {
     return (
@@ -272,6 +315,9 @@ export function TreinoScreen({ route, navigation }: ScreenProps<'Treino'>) {
       </Screen>
     )
   }
+
+  // enquanto decide se resume ou começa do zero, evita flash + salvar fresh por cima
+  if (!pronto) return <Screen><View style={styles.empty} /></Screen>
 
   return (
     <Screen>
@@ -320,7 +366,9 @@ export function TreinoScreen({ route, navigation }: ScreenProps<'Treino'>) {
           </View>
 
           <View style={styles.headerRight}>
-            <Icon name="stopwatch" size={17} color={colors.muted} />
+            <Pressable style={styles.iconBtn} onPress={parar} hitSlop={8}>
+              <Icon name="circle-stop" size={17} color={colors.muted} />
+            </Pressable>
             <Button label="Concluir" size="sm" onPress={concluir} />
           </View>
         </View>
