@@ -3,19 +3,23 @@ import { useFonts } from 'expo-font'
 import { StatusBar } from 'expo-status-bar'
 import { NavigationContainer, DarkTheme } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 import { fontMap } from './src/theme/fonts'
-import { colors } from './src/theme/theme'
+import { colors, font } from './src/theme/theme'
+import { Icon } from './src/components/Icon'
 import { AuthProvider, useAuth } from './src/auth/AuthProvider'
 import { LoginScreen } from './src/screens/LoginScreen'
 import { HomeScreen } from './src/screens/HomeScreen'
+import { EvolucaoScreen } from './src/screens/EvolucaoScreen'
 import { TreinoScreen } from './src/screens/TreinoScreen'
 import { FimScreen } from './src/screens/FimScreen'
-import type { RootStackParamList } from './src/navigation/types'
+import type { RootStackParamList, TabsParamList } from './src/navigation/types'
 
-const Stack = createNativeStackNavigator<RootStackParamList>()
+const RootStack = createNativeStackNavigator<RootStackParamList>()
+const Tab = createBottomTabNavigator<TabsParamList>()
 
 const navTheme = {
   ...DarkTheme,
@@ -37,6 +41,32 @@ function Splash() {
   )
 }
 
+function Tabs() {
+  return (
+    <Tab.Navigator
+      screenOptions={{
+        headerShown: false,
+        sceneStyle: { backgroundColor: colors.bg0 },
+        tabBarStyle: { backgroundColor: colors.bg1, borderTopColor: colors.border },
+        tabBarActiveTintColor: colors.accent,
+        tabBarInactiveTintColor: colors.muted,
+        tabBarLabelStyle: { fontFamily: font.semibold, fontSize: 11 },
+      }}
+    >
+      <Tab.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{ title: 'Início', tabBarIcon: ({ color }) => <Icon name="house" size={17} color={color} /> }}
+      />
+      <Tab.Screen
+        name="Evolucao"
+        component={EvolucaoScreen}
+        options={{ title: 'Evolução', tabBarIcon: ({ color }) => <Icon name="chart-line" size={17} color={color} /> }}
+      />
+    </Tab.Navigator>
+  )
+}
+
 // Portão: sem sessão → Login; com sessão → app.
 function Root() {
   const { session, loading } = useAuth()
@@ -46,21 +76,17 @@ function Root() {
 
   return (
     <NavigationContainer theme={navTheme}>
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: false,
-          contentStyle: { backgroundColor: colors.bg0 },
-          animation: 'slide_from_right',
-        }}
+      <RootStack.Navigator
+        screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.bg0 } }}
       >
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Treino" component={TreinoScreen} />
-        <Stack.Screen
+        <RootStack.Screen name="Tabs" component={Tabs} />
+        <RootStack.Screen name="Treino" component={TreinoScreen} options={{ animation: 'slide_from_right' }} />
+        <RootStack.Screen
           name="Fim"
           component={FimScreen}
           options={{ animation: 'slide_from_bottom', gestureEnabled: false }}
         />
-      </Stack.Navigator>
+      </RootStack.Navigator>
     </NavigationContainer>
   )
 }

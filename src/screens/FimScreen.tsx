@@ -29,7 +29,7 @@ export function FimScreen({ route, navigation }: ScreenProps<'Fim'>) {
     await appendCompletedSession({ ...sessao, sensacao })
     await clearActiveSession()
     void syncPendingSessions() // empurra pro Supabase (offline-first: já está salvo local)
-    navigation.reset({ index: 0, routes: [{ name: 'Home' }] })
+    navigation.reset({ index: 0, routes: [{ name: 'Tabs' }] })
   }
 
   return (
