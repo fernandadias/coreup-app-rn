@@ -23,6 +23,7 @@ A Nanda é designer que usa código como ferramenta. Responder em **português (
 O app tem **livre** (self-serve, funil) e **aluna** (consultoria paga), via `plano` no `Usuario`. Grátis = ferramenta inteligente; pago = coach. A v1/MVP foca **só na aluna** (as 3 testadoras da consultoria); o mundo livre está **arquitetado no modelo/navegação mas não implementado** até o CoreUP voltar ao radar (pós-formatura CBMF, out/2026). Ver memória `coreup-app-dois-mundos`.
 
 ### O que já está implementado
+- **Down-sync do programa (#69)**: o app baixa o plano REAL da aluna do Supabase (não usa mais o seed em produção). Vínculo conta↔aluna por **código** (o `app_token` do dash) via RPC `resgatar_aluno` — tela `CodigoScreen`. Depois busca o plano mais recente (`planos.dados`), mapeia `PlanoDeTreino → Rotina` em `src/api/programa.ts`, e serve via `ProgramaProvider` (cache offline-first em `src/storage/programa.ts`, fallback pro seed). SQL: `coreup-dash-pro/supabase/migrations/0004_vinculo_app.sql` (aplicada). Prancha desce como `tempoAlvoSeg` → alvo "30s" no Treino.
 - **Anamnese (first-run, gate)**: 5 passos (objetivo, onde treina, estilo, rotina+atividades, dores+obs). Passo 1 tem só Continuar (100% largura, sem Voltar). Sem ela preenchida, o app inteiro é a anamnese; ao salvar, o `RootStack` troca pras tabs sozinho. Storage em `src/storage/perfil.ts`; estado reativo no `PerfilProvider`. TODO: quando o sync existir, abrir pré-preenchida do Admin → vira "confirme seus dados".
 - **Home (hub)**: logo real (assets/logo-coreupteam.png) + avatar (→ Perfil) + sequência (semanas reais), treino de hoje, **resumo da semana** (feitos/meta), recado do coach, programa A/B/C (toca e inicia). Rotinas foi absorvida aqui.
 - **Treino (coração)**: séries com input soft, add/remover série (swipe), PSE bottom-sheet, rest timer, header de vidro colapsável, nudge de carga.
@@ -32,7 +33,7 @@ O app tem **livre** (self-serve, funil) e **aluna** (consultoria paga), via `pla
 - **Live Activity (iOS)**: Dynamic Island + lock screen. Atualiza por evento (ver limitações).
 
 ### Navegação
-Tab bar = **2** (Início · Evolução). **Perfil não é tab** — é avatar no header. Anamnese é gate fora das tabs. Rotinas foi removida (a Home é o hub); volta como aba só no mundo livre.
+Tab bar = **2** (Início · Evolução). **Perfil não é tab** — é avatar no header. Portão: Login → **Código** (vínculo com a consultoria) → **Anamnese** → app. Rotinas foi removida (a Home é o hub); volta como aba só no mundo livre.
 
 ## Stack
 
@@ -47,12 +48,14 @@ Tab bar = **2** (Início · Evolução). **Perfil não é tab** — é avatar no
 src/
   theme/       theme.ts (cores/radius/fonts), fonts.ts (useFonts map)
   data/        types.ts (+ Anamnese, Plano), seed.ts  ← programa placeholder; trocar pelo real aqui
-  storage/     sessions.ts, perfil.ts (anamnese local)
+  storage/     sessions.ts, perfil.ts (anamnese local), programa.ts (cache do plano)
   auth/        AuthProvider (Supabase)
   perfil/      PerfilProvider (anamnese reativa + nome + plano)
+  programa/    ProgramaProvider (down-sync do plano: vínculo, getTreino, fallback seed)
+  api/         sync.ts (sessões↑), programa.ts (plano↓ + resgatar_aluno + map PlanoDeTreino→Rotina)
   lib/         format.ts, useDuration.ts, stats.ts (1RM/sequência/volume — Home + Evolução)
   components/  Button, Card, Badge, Screen, Icon, PseSheet, RestTimer
-  screens/     AnamneseScreen (gate), HomeScreen (hub), TreinoScreen (core), FimScreen, EvolucaoScreen, PerfilScreen
+  screens/     CodigoScreen (gate vínculo), AnamneseScreen (gate), HomeScreen (hub), TreinoScreen (core), FimScreen, EvolucaoScreen, PerfilScreen
   navigation/  types.ts (RootStack: Anamnese | Tabs → Treino/Fim/Perfil; Tabs: Home/Evolucao)
   liveactivity/ WorkoutActivity.tsx ('widget' → SwiftUI), index.ts (start/update/end)
 App.tsx        fontes + NavigationContainer + GestureHandlerRootView

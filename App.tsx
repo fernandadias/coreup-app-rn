@@ -12,7 +12,9 @@ import { colors, font } from './src/theme/theme'
 import { Icon } from './src/components/Icon'
 import { AuthProvider, useAuth } from './src/auth/AuthProvider'
 import { PerfilProvider, usePerfil } from './src/perfil/PerfilProvider'
+import { ProgramaProvider, usePrograma } from './src/programa/ProgramaProvider'
 import { LoginScreen } from './src/screens/LoginScreen'
+import { CodigoScreen } from './src/screens/CodigoScreen'
 import { AnamneseScreen } from './src/screens/AnamneseScreen'
 import { HomeScreen } from './src/screens/HomeScreen'
 import { EvolucaoScreen } from './src/screens/EvolucaoScreen'
@@ -70,14 +72,16 @@ function Tabs() {
   )
 }
 
-// Portão: sem sessão → Login; sem anamnese → Anamnese (first-run); com tudo → app.
+// Portão: sem sessão → Login; sem vínculo → Código; sem anamnese → Anamnese; com tudo → app.
 function Root() {
   const { session, loading: authLoading } = useAuth()
   const { anamnese, loading: perfilLoading } = usePerfil()
+  const { vinculado, loading: programaLoading } = usePrograma()
 
   if (authLoading) return <Splash />
   if (!session) return <LoginScreen />
-  if (perfilLoading) return <Splash />
+  if (perfilLoading || programaLoading) return <Splash />
+  if (!vinculado) return <CodigoScreen />
 
   return (
     <NavigationContainer theme={navTheme}>
@@ -116,7 +120,9 @@ export default function App() {
         <StatusBar style="light" />
         <AuthProvider>
           <PerfilProvider>
-            <Root />
+            <ProgramaProvider>
+              <Root />
+            </ProgramaProvider>
           </PerfilProvider>
         </AuthProvider>
       </SafeAreaProvider>

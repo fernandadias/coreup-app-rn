@@ -158,6 +158,8 @@ export interface SeriePrescrita {
   repsAlvo: string
   /** RPE alvo (6..10, passo 0,5). null = sem alvo, ex. aquecimento. */
   pseAlvo: number | null
+  /** Sustentação alvo em segundos (isométricos: prancha). Presente = série por tempo, não reps. */
+  tempoAlvoSeg?: number
 }
 
 export interface BlocoRotina {

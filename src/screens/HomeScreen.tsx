@@ -6,11 +6,11 @@ import { Card } from '../components/Card'
 import { Button } from '../components/Button'
 import { Icon } from '../components/Icon'
 import { colors, font, radius } from '../theme/theme'
-import { programa, treinoA } from '../data/seed'
 import { syncPendingSessions } from '../api/sync'
 import { listSessions } from '../storage/sessions'
 import { sessionsThisWeek, weeksStreak } from '../lib/stats'
 import { usePerfil } from '../perfil/PerfilProvider'
+import { usePrograma } from '../programa/ProgramaProvider'
 import type { Sessao } from '../data/types'
 import type { TabScreenProps } from '../navigation/types'
 
@@ -22,8 +22,9 @@ const iniciais = (nome: string) =>
     .join('')
 
 export function HomeScreen({ navigation }: TabScreenProps<'Home'>) {
-  const hoje = programa[0] // v1: treino A é o de hoje
   const { nome, anamnese } = usePerfil()
+  const { programa, coachNote } = usePrograma()
+  const hoje = programa[0] // v1: primeiro treino do programa é o de hoje
   const [sessions, setSessions] = useState<Sessao[]>([])
 
   useFocusEffect(
@@ -95,13 +96,15 @@ export function HomeScreen({ navigation }: TabScreenProps<'Home'>) {
           </View>
         </View>
 
-        <Card style={styles.noteCard}>
-          <View style={styles.noteHead}>
-            <Icon name="comment-dots" size={13} color={colors.accent} />
-            <Text style={styles.noteTitle}>Recado do coach</Text>
-          </View>
-          <Text style={styles.noteTxt}>{treinoA.coachNote}</Text>
-        </Card>
+        {coachNote ? (
+          <Card style={styles.noteCard}>
+            <View style={styles.noteHead}>
+              <Icon name="comment-dots" size={13} color={colors.accent} />
+              <Text style={styles.noteTitle}>Recado do coach</Text>
+            </View>
+            <Text style={styles.noteTxt}>{coachNote}</Text>
+          </Card>
+        ) : null}
 
         <Text style={styles.section}>Seu programa</Text>
         {programa.map((t, i) => (

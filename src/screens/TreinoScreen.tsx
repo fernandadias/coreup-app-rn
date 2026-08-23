@@ -20,7 +20,7 @@ import { PseSheet, type PseContext } from '../components/PseSheet'
 import { RestTimer, REST_TIMER_HEIGHT } from '../components/RestTimer'
 import { colors, font, radius } from '../theme/theme'
 import { fmtClock, fmtNum, fmtRest, parseKg, uid } from '../lib/format'
-import { getTreino } from '../data/seed'
+import { usePrograma } from '../programa/ProgramaProvider'
 import type { ScreenProps } from '../navigation/types'
 import type { SerieLog, Sessao, SetTipo } from '../data/types'
 import { useDuration } from '../lib/useDuration'
@@ -36,6 +36,7 @@ interface SerieRT {
   kgAlvo: string
   repsAlvo: string
   pseAlvo: number | null
+  tempoAlvoSeg?: number // isométrico (prancha): alvo em segundos, no lugar de reps
   kg: string
   reps: string
   pse: number | null
@@ -63,7 +64,8 @@ function withPlaceholders(ex: ExercicioRT) {
   let lastReps = ''
   return ex.series.map((s) => {
     const phKg = s.kgAlvo !== '' ? s.kgAlvo : lastKg
-    const phReps = s.repsAlvo !== '' ? s.repsAlvo : lastReps
+    const phReps =
+      s.repsAlvo !== '' ? s.repsAlvo : s.tempoAlvoSeg != null ? `${s.tempoAlvoSeg}s` : lastReps
     const effKg = s.kg !== '' ? s.kg : phKg
     const effReps = s.reps !== '' ? s.reps : phReps
     lastKg = effKg
@@ -73,7 +75,8 @@ function withPlaceholders(ex: ExercicioRT) {
 }
 
 export function TreinoScreen({ route, navigation }: ScreenProps<'Treino'>) {
-  const treino = useMemo(() => getTreino(route.params.treinoId), [route.params.treinoId])
+  const { getTreino } = usePrograma()
+  const treino = useMemo(() => getTreino(route.params.treinoId), [getTreino, route.params.treinoId])
 
   const [exs, setExs] = useState<ExercicioRT[]>(() =>
     (treino?.exercicios ?? []).map((e) => ({
@@ -90,6 +93,7 @@ export function TreinoScreen({ route, navigation }: ScreenProps<'Treino'>) {
         kgAlvo: s.kgAlvo,
         repsAlvo: s.repsAlvo,
         pseAlvo: s.pseAlvo,
+        tempoAlvoSeg: s.tempoAlvoSeg,
         kg: '',
         reps: '',
         pse: null,
