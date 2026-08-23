@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import { Screen } from '../components/Screen'
 import { Card } from '../components/Card'
@@ -5,10 +6,16 @@ import { Button } from '../components/Button'
 import { Icon } from '../components/Icon'
 import { colors, font, radius } from '../theme/theme'
 import { programa, treinoA } from '../data/seed'
+import { syncPendingSessions } from '../api/sync'
 import type { ScreenProps } from '../navigation/types'
 
 export function HomeScreen({ navigation }: ScreenProps<'Home'>) {
   const hoje = programa[0] // v1: treino A é o de hoje
+
+  // ao abrir a Home, empurra sessões que ficaram pendentes de sync (offline-first)
+  useEffect(() => {
+    void syncPendingSessions()
+  }, [])
 
   return (
     <Screen>

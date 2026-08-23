@@ -7,6 +7,7 @@ import { Icon } from '../components/Icon'
 import { colors, font, radius } from '../theme/theme'
 import { fmtClock } from '../lib/format'
 import { appendCompletedSession, clearActiveSession } from '../storage/sessions'
+import { syncPendingSessions } from '../api/sync'
 import type { ScreenProps } from '../navigation/types'
 
 const fmtVolume = (n: number) => Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
@@ -27,6 +28,7 @@ export function FimScreen({ route, navigation }: ScreenProps<'Fim'>) {
   const salvar = async () => {
     await appendCompletedSession({ ...sessao, sensacao })
     await clearActiveSession()
+    void syncPendingSessions() // empurra pro Supabase (offline-first: já está salvo local)
     navigation.reset({ index: 0, routes: [{ name: 'Home' }] })
   }
 
