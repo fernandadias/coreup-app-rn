@@ -226,13 +226,26 @@ export function TreinoScreen({ route, navigation }: ScreenProps<'Treino'>) {
     const logs: SerieLog[] = []
     exs.forEach((ex) => {
       withPlaceholders(ex).forEach(({ s, effKg, effReps }) => {
-        if (s.done) logs.push({ serieId: s.id, label: s.label, tipo: s.tipo, kg: effKg, reps: effReps, pse: s.pse })
+        if (s.done) {
+          // exercicioId (#54): permite agregar a sessão por exercício e por padrão postural
+          logs.push({
+            serieId: s.id,
+            label: s.label,
+            tipo: s.tipo,
+            exercicioId: ex.id,
+            kg: effKg,
+            reps: effReps,
+            pse: s.pse,
+          })
+        }
       })
     })
     const sessao: Sessao = {
       id: uid('sess'),
-      treinoId: treino?.id ?? route.params.treinoId,
-      treinoTitulo: treino?.titulo ?? 'Treino',
+      usuarioId: null, // vira o auth.uid() quando houver conta (#47)
+      rotinaId: treino?.id ?? route.params.treinoId,
+      rotinaTitulo: treino?.titulo ?? 'Treino',
+      tipo: 'treino', // 'micro' quando a micro-sessão existir (#63)
       iniciadaEm: startedAt,
       concluidaEm: Date.now(),
       duracaoSeg: Math.round((Date.now() - startedAt) / 1000),

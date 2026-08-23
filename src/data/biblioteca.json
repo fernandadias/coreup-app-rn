@@ -1,0 +1,868 @@
+[
+  {
+    "id": "ex-001",
+    "nome": "Supino reto com barra",
+    "musculoPrincipal": "Peitoral",
+    "musculosSecundarios": [
+      "Triceps",
+      "Ombros"
+    ],
+    "padraoMovimento": "empurrar horizontal",
+    "tipo": "composto",
+    "equipamentos": [
+      "barra",
+      "banco"
+    ],
+    "nivel": "intermediario",
+    "compensa": []
+  },
+  {
+    "id": "ex-002",
+    "nome": "Supino inclinado com halteres",
+    "musculoPrincipal": "Peitoral",
+    "musculosSecundarios": [
+      "Triceps",
+      "Ombros"
+    ],
+    "padraoMovimento": "empurrar horizontal",
+    "tipo": "composto",
+    "equipamentos": [
+      "halteres",
+      "banco"
+    ],
+    "nivel": "intermediario",
+    "compensa": []
+  },
+  {
+    "id": "ex-003",
+    "nome": "Crucifixo na máquina (peck deck)",
+    "musculoPrincipal": "Peitoral",
+    "musculosSecundarios": [
+      "Ombros"
+    ],
+    "padraoMovimento": "isolamento peitoral",
+    "tipo": "isolado",
+    "equipamentos": [
+      "maquina"
+    ],
+    "nivel": "iniciante",
+    "compensa": []
+  },
+  {
+    "id": "ex-004",
+    "nome": "Crossover no cabo",
+    "musculoPrincipal": "Peitoral",
+    "musculosSecundarios": [
+      "Ombros"
+    ],
+    "padraoMovimento": "isolamento peitoral",
+    "tipo": "isolado",
+    "equipamentos": [
+      "cabo"
+    ],
+    "nivel": "intermediario",
+    "compensa": []
+  },
+  {
+    "id": "ex-005",
+    "nome": "Flexão de braço",
+    "musculoPrincipal": "Peitoral",
+    "musculosSecundarios": [
+      "Triceps",
+      "Core"
+    ],
+    "padraoMovimento": "empurrar horizontal",
+    "tipo": "composto",
+    "equipamentos": [
+      "peso corporal"
+    ],
+    "nivel": "iniciante",
+    "compensa": [
+      "estabilidade-core"
+    ]
+  },
+  {
+    "id": "ex-006",
+    "nome": "Supino na máquina",
+    "musculoPrincipal": "Peitoral",
+    "musculosSecundarios": [
+      "Triceps",
+      "Ombros"
+    ],
+    "padraoMovimento": "empurrar horizontal",
+    "tipo": "composto",
+    "equipamentos": [
+      "maquina"
+    ],
+    "nivel": "iniciante",
+    "compensa": []
+  },
+  {
+    "id": "ex-007",
+    "nome": "Puxada frente na polia",
+    "musculoPrincipal": "Costas",
+    "musculosSecundarios": [
+      "Biceps"
+    ],
+    "padraoMovimento": "puxar vertical",
+    "tipo": "composto",
+    "equipamentos": [
+      "cabo",
+      "maquina"
+    ],
+    "nivel": "iniciante",
+    "compensa": [
+      "retracao-escapular"
+    ]
+  },
+  {
+    "id": "ex-008",
+    "nome": "Remada curvada com barra",
+    "musculoPrincipal": "Costas",
+    "musculosSecundarios": [
+      "Biceps",
+      "PosteriorCoxa"
+    ],
+    "padraoMovimento": "puxar horizontal",
+    "tipo": "composto",
+    "equipamentos": [
+      "barra"
+    ],
+    "nivel": "intermediario",
+    "compensa": [
+      "retracao-escapular",
+      "extensao-toracica"
+    ]
+  },
+  {
+    "id": "ex-009",
+    "nome": "Remada baixa no cabo",
+    "musculoPrincipal": "Costas",
+    "musculosSecundarios": [
+      "Biceps"
+    ],
+    "padraoMovimento": "puxar horizontal",
+    "tipo": "composto",
+    "equipamentos": [
+      "cabo",
+      "maquina"
+    ],
+    "nivel": "iniciante",
+    "compensa": [
+      "retracao-escapular"
+    ]
+  },
+  {
+    "id": "ex-010",
+    "nome": "Remada unilateral com halter",
+    "musculoPrincipal": "Costas",
+    "musculosSecundarios": [
+      "Biceps"
+    ],
+    "padraoMovimento": "puxar horizontal",
+    "tipo": "composto",
+    "equipamentos": [
+      "halteres",
+      "banco"
+    ],
+    "nivel": "intermediario",
+    "compensa": [
+      "retracao-escapular"
+    ]
+  },
+  {
+    "id": "ex-011",
+    "nome": "Barra fixa",
+    "musculoPrincipal": "Costas",
+    "musculosSecundarios": [
+      "Biceps"
+    ],
+    "padraoMovimento": "puxar vertical",
+    "tipo": "composto",
+    "equipamentos": [
+      "peso corporal",
+      "barra fixa"
+    ],
+    "nivel": "avancado",
+    "compensa": [
+      "retracao-escapular",
+      "extensao-toracica"
+    ]
+  },
+  {
+    "id": "ex-012",
+    "nome": "Pulldown na máquina",
+    "musculoPrincipal": "Costas",
+    "musculosSecundarios": [
+      "Biceps"
+    ],
+    "padraoMovimento": "puxar vertical",
+    "tipo": "composto",
+    "equipamentos": [
+      "maquina"
+    ],
+    "nivel": "iniciante",
+    "compensa": [
+      "retracao-escapular"
+    ]
+  },
+  {
+    "id": "ex-013",
+    "nome": "Desenvolvimento com halteres",
+    "musculoPrincipal": "Ombros",
+    "musculosSecundarios": [
+      "Triceps"
+    ],
+    "padraoMovimento": "empurrar vertical",
+    "tipo": "composto",
+    "equipamentos": [
+      "halteres",
+      "banco"
+    ],
+    "nivel": "intermediario",
+    "compensa": [
+      "extensao-toracica"
+    ]
+  },
+  {
+    "id": "ex-014",
+    "nome": "Elevação lateral",
+    "musculoPrincipal": "Ombros",
+    "musculosSecundarios": [],
+    "padraoMovimento": "elevacao lateral",
+    "tipo": "isolado",
+    "equipamentos": [
+      "halteres"
+    ],
+    "nivel": "iniciante",
+    "compensa": []
+  },
+  {
+    "id": "ex-015",
+    "nome": "Desenvolvimento na máquina",
+    "musculoPrincipal": "Ombros",
+    "musculosSecundarios": [
+      "Triceps"
+    ],
+    "padraoMovimento": "empurrar vertical",
+    "tipo": "composto",
+    "equipamentos": [
+      "maquina"
+    ],
+    "nivel": "iniciante",
+    "compensa": [
+      "extensao-toracica"
+    ]
+  },
+  {
+    "id": "ex-016",
+    "nome": "Elevação frontal",
+    "musculoPrincipal": "Ombros",
+    "musculosSecundarios": [],
+    "padraoMovimento": "elevacao frontal",
+    "tipo": "isolado",
+    "equipamentos": [
+      "halteres"
+    ],
+    "nivel": "iniciante",
+    "compensa": []
+  },
+  {
+    "id": "ex-017",
+    "nome": "Crucifixo invertido",
+    "musculoPrincipal": "Ombros",
+    "musculosSecundarios": [
+      "Costas"
+    ],
+    "padraoMovimento": "isolamento posterior de ombro",
+    "tipo": "isolado",
+    "equipamentos": [
+      "halteres",
+      "maquina"
+    ],
+    "nivel": "intermediario",
+    "compensa": [
+      "retracao-escapular",
+      "mobilidade-cervical"
+    ]
+  },
+  {
+    "id": "ex-018",
+    "nome": "Remada alta",
+    "musculoPrincipal": "Ombros",
+    "musculosSecundarios": [
+      "Biceps"
+    ],
+    "padraoMovimento": "puxar vertical",
+    "tipo": "composto",
+    "equipamentos": [
+      "barra",
+      "cabo"
+    ],
+    "nivel": "intermediario",
+    "compensa": []
+  },
+  {
+    "id": "ex-019",
+    "nome": "Rosca direta com barra",
+    "musculoPrincipal": "Biceps",
+    "musculosSecundarios": [],
+    "padraoMovimento": "flexao de cotovelo",
+    "tipo": "isolado",
+    "equipamentos": [
+      "barra"
+    ],
+    "nivel": "iniciante",
+    "compensa": []
+  },
+  {
+    "id": "ex-020",
+    "nome": "Rosca alternada com halteres",
+    "musculoPrincipal": "Biceps",
+    "musculosSecundarios": [],
+    "padraoMovimento": "flexao de cotovelo",
+    "tipo": "isolado",
+    "equipamentos": [
+      "halteres"
+    ],
+    "nivel": "iniciante",
+    "compensa": []
+  },
+  {
+    "id": "ex-021",
+    "nome": "Rosca scott",
+    "musculoPrincipal": "Biceps",
+    "musculosSecundarios": [],
+    "padraoMovimento": "flexao de cotovelo",
+    "tipo": "isolado",
+    "equipamentos": [
+      "banco",
+      "barra"
+    ],
+    "nivel": "intermediario",
+    "compensa": []
+  },
+  {
+    "id": "ex-022",
+    "nome": "Rosca martelo",
+    "musculoPrincipal": "Biceps",
+    "musculosSecundarios": [],
+    "padraoMovimento": "flexao de cotovelo",
+    "tipo": "isolado",
+    "equipamentos": [
+      "halteres"
+    ],
+    "nivel": "iniciante",
+    "compensa": []
+  },
+  {
+    "id": "ex-023",
+    "nome": "Rosca no cabo",
+    "musculoPrincipal": "Biceps",
+    "musculosSecundarios": [],
+    "padraoMovimento": "flexao de cotovelo",
+    "tipo": "isolado",
+    "equipamentos": [
+      "cabo"
+    ],
+    "nivel": "iniciante",
+    "compensa": []
+  },
+  {
+    "id": "ex-024",
+    "nome": "Tríceps testa",
+    "musculoPrincipal": "Triceps",
+    "musculosSecundarios": [],
+    "padraoMovimento": "extensao de cotovelo",
+    "tipo": "isolado",
+    "equipamentos": [
+      "barra",
+      "banco"
+    ],
+    "nivel": "intermediario",
+    "compensa": []
+  },
+  {
+    "id": "ex-025",
+    "nome": "Tríceps na polia (barra)",
+    "musculoPrincipal": "Triceps",
+    "musculosSecundarios": [],
+    "padraoMovimento": "extensao de cotovelo",
+    "tipo": "isolado",
+    "equipamentos": [
+      "cabo"
+    ],
+    "nivel": "iniciante",
+    "compensa": []
+  },
+  {
+    "id": "ex-026",
+    "nome": "Tríceps corda",
+    "musculoPrincipal": "Triceps",
+    "musculosSecundarios": [],
+    "padraoMovimento": "extensao de cotovelo",
+    "tipo": "isolado",
+    "equipamentos": [
+      "cabo"
+    ],
+    "nivel": "iniciante",
+    "compensa": []
+  },
+  {
+    "id": "ex-027",
+    "nome": "Mergulho no banco",
+    "musculoPrincipal": "Triceps",
+    "musculosSecundarios": [
+      "Peitoral"
+    ],
+    "padraoMovimento": "extensao de cotovelo",
+    "tipo": "composto",
+    "equipamentos": [
+      "peso corporal",
+      "banco"
+    ],
+    "nivel": "iniciante",
+    "compensa": []
+  },
+  {
+    "id": "ex-028",
+    "nome": "Tríceps francês com halter",
+    "musculoPrincipal": "Triceps",
+    "musculosSecundarios": [],
+    "padraoMovimento": "extensao de cotovelo",
+    "tipo": "isolado",
+    "equipamentos": [
+      "halteres"
+    ],
+    "nivel": "intermediario",
+    "compensa": []
+  },
+  {
+    "id": "ex-029",
+    "nome": "Agachamento livre",
+    "musculoPrincipal": "Quadriceps",
+    "musculosSecundarios": [
+      "Gluteos",
+      "PosteriorCoxa",
+      "Core"
+    ],
+    "padraoMovimento": "agachamento",
+    "tipo": "composto",
+    "equipamentos": [
+      "barra"
+    ],
+    "nivel": "avancado",
+    "compensa": [
+      "abertura-quadril",
+      "ativacao-glutea",
+      "extensao-toracica"
+    ]
+  },
+  {
+    "id": "ex-030",
+    "nome": "Leg press 45°",
+    "musculoPrincipal": "Quadriceps",
+    "musculosSecundarios": [
+      "Gluteos"
+    ],
+    "padraoMovimento": "agachamento",
+    "tipo": "composto",
+    "equipamentos": [
+      "maquina"
+    ],
+    "nivel": "iniciante",
+    "compensa": [
+      "ativacao-glutea"
+    ]
+  },
+  {
+    "id": "ex-031",
+    "nome": "Cadeira extensora",
+    "musculoPrincipal": "Quadriceps",
+    "musculosSecundarios": [],
+    "padraoMovimento": "extensao de joelho",
+    "tipo": "isolado",
+    "equipamentos": [
+      "maquina"
+    ],
+    "nivel": "iniciante",
+    "compensa": []
+  },
+  {
+    "id": "ex-032",
+    "nome": "Hack machine",
+    "musculoPrincipal": "Quadriceps",
+    "musculosSecundarios": [
+      "Gluteos"
+    ],
+    "padraoMovimento": "agachamento",
+    "tipo": "composto",
+    "equipamentos": [
+      "maquina"
+    ],
+    "nivel": "intermediario",
+    "compensa": [
+      "ativacao-glutea"
+    ]
+  },
+  {
+    "id": "ex-033",
+    "nome": "Afundo (passada)",
+    "musculoPrincipal": "Quadriceps",
+    "musculosSecundarios": [
+      "Gluteos",
+      "PosteriorCoxa"
+    ],
+    "padraoMovimento": "avanco unilateral",
+    "tipo": "composto",
+    "equipamentos": [
+      "halteres"
+    ],
+    "nivel": "intermediario",
+    "compensa": [
+      "abertura-quadril",
+      "ativacao-glutea"
+    ]
+  },
+  {
+    "id": "ex-034",
+    "nome": "Agachamento no Smith",
+    "musculoPrincipal": "Quadriceps",
+    "musculosSecundarios": [
+      "Gluteos"
+    ],
+    "padraoMovimento": "agachamento",
+    "tipo": "composto",
+    "equipamentos": [
+      "smith"
+    ],
+    "nivel": "iniciante",
+    "compensa": [
+      "ativacao-glutea"
+    ]
+  },
+  {
+    "id": "ex-035",
+    "nome": "Stiff com barra",
+    "musculoPrincipal": "PosteriorCoxa",
+    "musculosSecundarios": [
+      "Gluteos",
+      "Costas"
+    ],
+    "padraoMovimento": "dobradica de quadril",
+    "tipo": "composto",
+    "equipamentos": [
+      "barra"
+    ],
+    "nivel": "intermediario",
+    "compensa": [
+      "ativacao-glutea",
+      "extensao-toracica"
+    ]
+  },
+  {
+    "id": "ex-036",
+    "nome": "Mesa flexora",
+    "musculoPrincipal": "PosteriorCoxa",
+    "musculosSecundarios": [],
+    "padraoMovimento": "flexao de joelho",
+    "tipo": "isolado",
+    "equipamentos": [
+      "maquina"
+    ],
+    "nivel": "iniciante",
+    "compensa": []
+  },
+  {
+    "id": "ex-037",
+    "nome": "Cadeira flexora",
+    "musculoPrincipal": "PosteriorCoxa",
+    "musculosSecundarios": [],
+    "padraoMovimento": "flexao de joelho",
+    "tipo": "isolado",
+    "equipamentos": [
+      "maquina"
+    ],
+    "nivel": "iniciante",
+    "compensa": []
+  },
+  {
+    "id": "ex-038",
+    "nome": "Levantamento terra romeno",
+    "musculoPrincipal": "PosteriorCoxa",
+    "musculosSecundarios": [
+      "Gluteos",
+      "Costas"
+    ],
+    "padraoMovimento": "dobradica de quadril",
+    "tipo": "composto",
+    "equipamentos": [
+      "barra"
+    ],
+    "nivel": "avancado",
+    "compensa": [
+      "ativacao-glutea",
+      "extensao-toracica"
+    ]
+  },
+  {
+    "id": "ex-039",
+    "nome": "Flexão nórdica",
+    "musculoPrincipal": "PosteriorCoxa",
+    "musculosSecundarios": [
+      "Gluteos"
+    ],
+    "padraoMovimento": "flexao de joelho",
+    "tipo": "isolado",
+    "equipamentos": [
+      "peso corporal"
+    ],
+    "nivel": "avancado",
+    "compensa": []
+  },
+  {
+    "id": "ex-040",
+    "nome": "Elevação pélvica (hip thrust)",
+    "musculoPrincipal": "Gluteos",
+    "musculosSecundarios": [
+      "PosteriorCoxa"
+    ],
+    "padraoMovimento": "extensao de quadril",
+    "tipo": "composto",
+    "equipamentos": [
+      "barra",
+      "banco"
+    ],
+    "nivel": "intermediario",
+    "compensa": [
+      "ativacao-glutea",
+      "abertura-quadril"
+    ]
+  },
+  {
+    "id": "ex-041",
+    "nome": "Cadeira abdutora",
+    "musculoPrincipal": "Gluteos",
+    "musculosSecundarios": [],
+    "padraoMovimento": "abducao de quadril",
+    "tipo": "isolado",
+    "equipamentos": [
+      "maquina"
+    ],
+    "nivel": "iniciante",
+    "compensa": [
+      "ativacao-glutea"
+    ]
+  },
+  {
+    "id": "ex-042",
+    "nome": "Coice no cabo",
+    "musculoPrincipal": "Gluteos",
+    "musculosSecundarios": [
+      "PosteriorCoxa"
+    ],
+    "padraoMovimento": "extensao de quadril",
+    "tipo": "isolado",
+    "equipamentos": [
+      "cabo"
+    ],
+    "nivel": "iniciante",
+    "compensa": [
+      "ativacao-glutea",
+      "abertura-quadril"
+    ]
+  },
+  {
+    "id": "ex-043",
+    "nome": "Agachamento búlgaro",
+    "musculoPrincipal": "Gluteos",
+    "musculosSecundarios": [
+      "Quadriceps",
+      "PosteriorCoxa"
+    ],
+    "padraoMovimento": "avanco unilateral",
+    "tipo": "composto",
+    "equipamentos": [
+      "halteres",
+      "banco"
+    ],
+    "nivel": "intermediario",
+    "compensa": [
+      "abertura-quadril",
+      "ativacao-glutea"
+    ]
+  },
+  {
+    "id": "ex-044",
+    "nome": "Glúteo na máquina",
+    "musculoPrincipal": "Gluteos",
+    "musculosSecundarios": [
+      "PosteriorCoxa"
+    ],
+    "padraoMovimento": "extensao de quadril",
+    "tipo": "isolado",
+    "equipamentos": [
+      "maquina"
+    ],
+    "nivel": "iniciante",
+    "compensa": [
+      "ativacao-glutea",
+      "abertura-quadril"
+    ]
+  },
+  {
+    "id": "ex-045",
+    "nome": "Panturrilha em pé",
+    "musculoPrincipal": "Panturrilhas",
+    "musculosSecundarios": [],
+    "padraoMovimento": "panturrilha",
+    "tipo": "isolado",
+    "equipamentos": [
+      "maquina"
+    ],
+    "nivel": "iniciante",
+    "compensa": []
+  },
+  {
+    "id": "ex-046",
+    "nome": "Panturrilha sentado",
+    "musculoPrincipal": "Panturrilhas",
+    "musculosSecundarios": [],
+    "padraoMovimento": "panturrilha",
+    "tipo": "isolado",
+    "equipamentos": [
+      "maquina"
+    ],
+    "nivel": "iniciante",
+    "compensa": []
+  },
+  {
+    "id": "ex-047",
+    "nome": "Panturrilha no leg press",
+    "musculoPrincipal": "Panturrilhas",
+    "musculosSecundarios": [],
+    "padraoMovimento": "panturrilha",
+    "tipo": "isolado",
+    "equipamentos": [
+      "maquina"
+    ],
+    "nivel": "iniciante",
+    "compensa": []
+  },
+  {
+    "id": "ex-048",
+    "nome": "Prancha abdominal",
+    "musculoPrincipal": "Core",
+    "musculosSecundarios": [],
+    "padraoMovimento": "core anti-extensao",
+    "tipo": "isolado",
+    "equipamentos": [
+      "peso corporal"
+    ],
+    "nivel": "iniciante",
+    "compensa": [
+      "estabilidade-core"
+    ]
+  },
+  {
+    "id": "ex-049",
+    "nome": "Abdominal supra",
+    "musculoPrincipal": "Core",
+    "musculosSecundarios": [],
+    "padraoMovimento": "core flexao",
+    "tipo": "isolado",
+    "equipamentos": [
+      "peso corporal"
+    ],
+    "nivel": "iniciante",
+    "compensa": []
+  },
+  {
+    "id": "ex-050",
+    "nome": "Prancha lateral",
+    "musculoPrincipal": "Core",
+    "musculosSecundarios": [
+      "Ombros"
+    ],
+    "padraoMovimento": "core anti-flexao lateral",
+    "tipo": "isolado",
+    "equipamentos": [
+      "peso corporal"
+    ],
+    "nivel": "iniciante",
+    "compensa": [
+      "estabilidade-core"
+    ]
+  },
+  {
+    "id": "ex-051",
+    "nome": "Elevação de pernas",
+    "musculoPrincipal": "Core",
+    "musculosSecundarios": [],
+    "padraoMovimento": "core flexao",
+    "tipo": "isolado",
+    "equipamentos": [
+      "peso corporal"
+    ],
+    "nivel": "intermediario",
+    "compensa": []
+  },
+  {
+    "id": "ex-052",
+    "nome": "Rotação no cabo (pallof)",
+    "musculoPrincipal": "Core",
+    "musculosSecundarios": [],
+    "padraoMovimento": "core anti-rotacao",
+    "tipo": "isolado",
+    "equipamentos": [
+      "cabo"
+    ],
+    "nivel": "intermediario",
+    "compensa": [
+      "estabilidade-core"
+    ]
+  },
+  {
+    "id": "ex-053",
+    "nome": "Agachamento pêndulo (pendulum squat)",
+    "musculoPrincipal": "Quadriceps",
+    "musculosSecundarios": [
+      "Gluteos"
+    ],
+    "padraoMovimento": "agachamento",
+    "tipo": "composto",
+    "equipamentos": [
+      "maquina"
+    ],
+    "nivel": "intermediario",
+    "compensa": [
+      "ativacao-glutea"
+    ]
+  },
+  {
+    "id": "ex-054",
+    "nome": "Cadeira adutora",
+    "musculoPrincipal": "Quadriceps",
+    "musculosSecundarios": [],
+    "padraoMovimento": "aducao de quadril",
+    "tipo": "isolado",
+    "equipamentos": [
+      "maquina"
+    ],
+    "nivel": "iniciante",
+    "compensa": []
+  },
+  {
+    "id": "ex-055",
+    "nome": "Tríceps coice na polia",
+    "musculoPrincipal": "Triceps",
+    "musculosSecundarios": [],
+    "padraoMovimento": "extensao de cotovelo",
+    "tipo": "isolado",
+    "equipamentos": [
+      "cabo"
+    ],
+    "nivel": "iniciante",
+    "compensa": []
+  }
+]

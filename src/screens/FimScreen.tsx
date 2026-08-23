@@ -38,7 +38,7 @@ export function FimScreen({ route, navigation }: ScreenProps<'Fim'>) {
             <Icon name="check" size={34} color={colors.bg0} />
           </View>
           <Text style={styles.title}>Treino concluído</Text>
-          <Text style={styles.sub}>{sessao.treinoTitulo}</Text>
+          <Text style={styles.sub}>{sessao.rotinaTitulo}</Text>
         </View>
 
         <Card style={styles.resumo}>
