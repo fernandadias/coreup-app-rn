@@ -864,5 +864,38 @@
     ],
     "nivel": "iniciante",
     "compensa": []
+  },
+  {
+    "id": "ex-056",
+    "nome": "Suitcase carry",
+    "musculoPrincipal": "Core",
+    "musculosSecundarios": [
+      "Ombros",
+      "Gluteos"
+    ],
+    "padraoMovimento": "core anti-flexao lateral",
+    "tipo": "composto",
+    "equipamentos": [
+      "halteres"
+    ],
+    "nivel": "iniciante",
+    "compensa": [
+      "estabilidade-core"
+    ]
+  },
+  {
+    "id": "ex-057",
+    "nome": "Abdução de glúteo na polia",
+    "musculoPrincipal": "Gluteos",
+    "musculosSecundarios": [],
+    "padraoMovimento": "abducao de quadril",
+    "tipo": "isolado",
+    "equipamentos": [
+      "cabo"
+    ],
+    "nivel": "iniciante",
+    "compensa": [
+      "ativacao-glutea"
+    ]
   }
 ]
